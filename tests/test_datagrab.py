@@ -17,7 +17,7 @@ def test_jobs_dict(get_data):
 def test_connectdb():
     data = CapstonePrep.get_github_jobs_data()
     filename = 'demo_db.sqlite'
-    connection,cursor = CapstonePrep.open_db( filename )
+    connection, cursor = CapstonePrep.open_db( filename )
     CapstonePrep.setup_db( cursor,connection )
     CapstonePrep.save_to_db( data,cursor,connection )
     CapstonePrep.close_db( connection )
@@ -68,6 +68,19 @@ def test_save_data():
     saved_data = testfile.readlines()
     #the save puts a newline at the end
     assert f"{str(demo_data)}\n" in saved_data
+
+
+def test_connectdb():
+    data = CapstonePrep.get_github_jobs_data()
+    filename = 'demo_db.sqlite'
+    connection, cursor = CapstonePrep.open_db( filename )
+    CapstonePrep.setup_db( cursor,connection )
+    CapstonePrep.save_to_db( CapstonePrep.listOfDictionaries,cursor,connection )
+    CapstonePrep.close_db( connection )
+
+    connection,cursor = CapstonePrep.open_db( filename )
+    cursor.execute("SELECT * FROM jobs where jobs.title = 'Account Executive'")
+    assert cursor.fetchone()
 
 
 
